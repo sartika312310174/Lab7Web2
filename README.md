@@ -83,6 +83,21 @@ Artikel dengan nama admin_index()
 ![image](https://github.com/user-attachments/assets/439a2bc4-7c10-4829-ba93-66fa6e13d69d)
 # 15. Tambahkan routing untuk menu admin
 ![image](https://github.com/user-attachments/assets/2d525b81-8ac1-4c31-b3b3-ce9ad61ccd50)
+# 16. Hasil
+![image](https://github.com/user-attachments/assets/0ae817e3-29a2-4449-8866-c1eafea333be)
+# 17. Menambah data artikel
+![image](https://github.com/user-attachments/assets/bcbf4f76-dbec-4217-9da4-02c68c4f60de)
+# 18. Menambah form_data.php
+![image](https://github.com/user-attachments/assets/9d7e9fa2-c97f-494e-a508-d232bde1413d)
+# 19. Hasil, http://localhost:8080/admin/artikel/add
+![image](https://github.com/user-attachments/assets/f25cec02-07ed-4209-9bc5-2e8c39b4e53e)
+# 20. Mengubah Data
+Tambahkan fungsi/method baru pada Controller Artikel dengan nama edit()
+![image](https://github.com/user-attachments/assets/79b2fe10-7d08-4bda-9ecc-17670a89f134)
+# 21. Kemudian buat view untuk form tambah dengan nama form_edit.php
+![image](https://github.com/user-attachments/assets/1f84e082-e1af-4923-9523-6438cce97b18)
+# 22. hasil
+![image](https://github.com/user-attachments/assets/f2e178b5-72cf-4226-bab4-c1d50582d43c)
 
 
 
