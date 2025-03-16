@@ -98,6 +98,7 @@ Tambahkan fungsi/method baru pada Controller Artikel dengan nama edit()
 ![image](https://github.com/user-attachments/assets/1f84e082-e1af-4923-9523-6438cce97b18)
 # 22. hasil
 ![image](https://github.com/user-attachments/assets/f2e178b5-72cf-4226-bab4-c1d50582d43c)
+# 23. Menghapus Data
 
 
 
