@@ -1,4 +1,4 @@
-# PRAKTIKUM 1 WEB 2
+# PRAKTIKUM 1 sampai 3 mata kuliah WEB 2
 ```
 Nama: Sartika Agustin
 Nim: 312310174
@@ -47,7 +47,43 @@ sesuai dengan routing yang dibuat yaitu Contoller Page.
 ![image](https://github.com/user-attachments/assets/e65301b5-8847-4073-8a3e-062ce5d97c00)
 # 14. Hasil
 ![image](https://github.com/user-attachments/assets/08fa899d-f15e-4508-989f-695f1e87d1bb)
-# 15. Artikel
-![image](https://github.com/user-attachments/assets/d9d9693c-20f5-4e2a-acd6-beb068ccd27f)
+
+
+# PRAKTIKUM 2
+# 1. Membuat database
+![image](https://github.com/user-attachments/assets/ed1ac92e-3bc2-412b-8b63-556a385573d1)
+# 2. Membuat table
+![image](https://github.com/user-attachments/assets/163c52d7-a9ba-49b7-ab1e-83f5172ef2af)
+# 3. Konfigurasi koneksi database
+![image](https://github.com/user-attachments/assets/cd04cc3a-8796-466f-8f0d-436a784f5b7d)
+# 4. Membuat Model
+![image](https://github.com/user-attachments/assets/4a4425d5-bb11-484b-bf66-4e5baf05fc4f)
+# 5. Membuat Controller
+![image](https://github.com/user-attachments/assets/3e52d1e8-2360-4ad5-b91f-c3da0864343e)
+# 6. Membuat View
+![image](https://github.com/user-attachments/assets/73109d6e-81e5-40e0-a4db-c75d916e4c93)
+# 7. hasil dengan mengakses http://localhost:8080/artikel
+![image](https://github.com/user-attachments/assets/76cca3d3-bdad-460b-8723-90834aae2249)
+# 8. Isi tabel pada database 
+![image](https://github.com/user-attachments/assets/8d71fd50-ba70-4102-a48b-e1101464ea37)
+# 9.Hasilnya 
+![image](https://github.com/user-attachments/assets/e09baac8-60d8-4b3d-a5de-1756ea27cc31)
+# 10. Membuat tampilan detail, tambahkan fungsi baru
+![image](https://github.com/user-attachments/assets/e0e95f58-da4f-4406-bdd5-b92e3cdd425b)
+# 11. Menambah detail dengan membuat file baru, file detail.php
+![image](https://github.com/user-attachments/assets/3b2d0dec-1d58-4812-8ba5-2071078b81cc)
+# 12. Membuat Routing baru
+![image](https://github.com/user-attachments/assets/9b5a6af6-b718-4316-9e29-d58c44d5c2c1)
+# 13. Hasil
+![image](https://github.com/user-attachments/assets/a86ebf85-e771-4830-9bf1-5e4a09b805e3)
+# 14. Membuat menu admin
+![image](https://github.com/user-attachments/assets/8b5fe45e-33d3-41ba-a2ef-6f6dcde5407f)
+Menu admin adalah untuk proses CRUD data artikel. Buat method baru pada Controller
+Artikel dengan nama admin_index()
+![image](https://github.com/user-attachments/assets/439a2bc4-7c10-4829-ba93-66fa6e13d69d)
+# 15. Tambahkan routing untuk menu admin
+![image](https://github.com/user-attachments/assets/2d525b81-8ac1-4c31-b3b3-ce9ad61ccd50)
+
+
 
 
