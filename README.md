@@ -43,5 +43,11 @@ sesuai dengan routing yang dibuat yaitu Contoller Page.
 ![image](https://github.com/user-attachments/assets/6a1881c3-f00c-4261-9df0-9ed1f70a5535)
 # 12. Footer
 ![image](https://github.com/user-attachments/assets/ff9d07a4-48d2-41de-921a-5a01a5bcfeee)
+# 13. Ubah file about.php
+![image](https://github.com/user-attachments/assets/e65301b5-8847-4073-8a3e-062ce5d97c00)
+# 14. Hasil
+![image](https://github.com/user-attachments/assets/08fa899d-f15e-4508-989f-695f1e87d1bb)
+# 15. Artikel
+![image](https://github.com/user-attachments/assets/d9d9693c-20f5-4e2a-acd6-beb068ccd27f)
 
 
