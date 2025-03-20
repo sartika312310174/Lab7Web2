@@ -14,9 +14,8 @@ link pada navigasi header dapat menampilkan tampilan dengan layout yang sama.
 ![image](https://github.com/user-attachments/assets/f429fae6-4ed2-4b3d-a817-58d9a5bfbbe9)
 # 3. Menjalankan CLI
 ![image](https://github.com/user-attachments/assets/3e4c36ce-2320-4e80-944d-5f454bc38d6e)
-# 4. Mengaktifkan mode debugging
+# 4. Mengaktifkan mode debugging tampilan error akan seperti ini.
 ![image](https://github.com/user-attachments/assets/c288c6da-b59a-4b82-be82-806239e11bb8)
-Tampilan error akan seperti ini.
 ![image](https://github.com/user-attachments/assets/3258cf02-e845-4618-aad6-409c3abfef54)
 # 5. Routing dan Controller
 ![image](https://github.com/user-attachments/assets/0bc411f5-36b5-453e-9321-6f1a16a70f9d)
