@@ -162,5 +162,34 @@ Tambahkan fungsi/method baru pada Controller Artikel dengan nama edit()
 
 <?= $this->endSection() ?>
 ```
+# 3. Membuat Class View Cell
+```
+<?php
 
+namespace App\Cells;
+
+use CodeIgniter\View\Cells\Cell;
+use App\Models\ArtikelModel;
+
+class ArtikelTerkini extends Cell
+{
+    public function render(): string
+    {
+        $model = new ArtikelModel();
+        $artikel = $model->orderBy('id', 'DESC')->limit(5)->findAll();
+        
+        return view('components/artikel_terkini', ['artikel' => $artikel]);
+    }
+}
+```
+# 4 Membuat View untuk View Cell
+```
+<h3>Artikel Terkini</h3>
+<ul>
+    <?php foreach ($artikel as $row): ?>
+        <li><a href="<?= base_url('/artikel/' . $row['slug']) ?>"><?=
+$row['judul'] ?></a></li>
+    <?php endforeach; ?>
+</ul>
+```
 
