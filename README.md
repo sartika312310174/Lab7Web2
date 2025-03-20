@@ -66,7 +66,7 @@ sesuai dengan routing yang dibuat yaitu Contoller Page.
 # 8. Isi tabel pada database 
 ![image](https://github.com/user-attachments/assets/8d71fd50-ba70-4102-a48b-e1101464ea37)
 # 9.Hasilnya 
-![image](https://github.com/user-attachments/assets/e09baac8-60d8-4b3d-a5de-1756ea27cc31)
+![image](https://github.com/user-attachments/assets/8f0002ab-278b-4f2c-8e08-8eec7584765c)
 # 10. Membuat tampilan detail, tambahkan fungsi baru
 ![image](https://github.com/user-attachments/assets/e0e95f58-da4f-4406-bdd5-b92e3cdd425b)
 # 11. Menambah detail dengan membuat file baru, file detail.php
