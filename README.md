@@ -195,4 +195,15 @@ $row['judul'] ?></a></li>
 # 5 Mengaksesnya dengan localhost:8080/
 ![image](https://github.com/user-attachments/assets/3277ac1a-f756-4eb7-acbd-8dd31038c862)
 
+```
+Pertanyaan dan Tugas 
+• Sesuaikan data dengan praktikum sebelumnya, perlu melakukan perubahan field pada 
+database dengan menambahkan tanggal agar dapat mengambil data artikel terbaru. 
+• Selesaikan programnya sesuai Langkah-langkah yang ada. Anda boleh melakukan 
+improvisasi.  
+• Apa manfaat utama dari penggunaan View Layout dalam pengembangan aplikasi? 
+• Jelaskan perbedaan antara View Cell dan View biasa. 
+• Ubah View Cell agar hanya menampilkan post dengan kategori tertentu.
+```
+
 
