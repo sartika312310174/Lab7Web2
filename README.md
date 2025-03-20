@@ -192,4 +192,7 @@ $row['judul'] ?></a></li>
     <?php endforeach; ?>
 </ul>
 ```
+# 5 Mengaksesnya dengan localhost:8080/
+![image](https://github.com/user-attachments/assets/3277ac1a-f756-4eb7-acbd-8dd31038c862)
+
 
