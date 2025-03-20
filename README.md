@@ -204,6 +204,6 @@ improvisasi.
 • Jelaskan perbedaan antara View Cell dan View biasa. 
 • Ubah View Cell agar hanya menampilkan post dengan kategori tertentu.
 ```
-
+# 1. 
 
 
