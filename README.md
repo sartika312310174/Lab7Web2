@@ -428,6 +428,28 @@ public function logout()  {
     return redirect()->to('/user/login'); 
 }
 ```
+# PRAKTIKUM 5 
+# 1. Membuat pagination, buka Controller Artikel, kemudian modifikasi kode pada method admin_index seperti berikut. 
+```
+public function admin_index()  
+{ 
+$title = 'Daftar Artikel'; 
+$model = new ArtikelModel(); 
+$data = [ 
+'title'   => $title, 
+'artikel' => $model->paginate(10), #data dibatasi 10 record per halaman 
+'pager'   => $model->pager, 
+]; 
+return view('artikel/admin_index', $data); 
+}
+```
+# 2. Kemudian buka file views/artikel/admin_index.php dan tambahkan kode berikut dibawah deklarasi tabel data. 
+```
+<?= $pager->links(); ?>
+```
+#  3. Lalu buka di browser dengan: http://localhost:8080/index.php/admin/artikel
+![image](https://github.com/user-attachments/assets/2f7d65be-8fbb-4259-9453-3da87f92b33a)
+
 
 
 
