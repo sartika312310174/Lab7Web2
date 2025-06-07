@@ -450,6 +450,37 @@ return view('artikel/admin_index', $data);
 #  3. Lalu buka di browser dengan: http://localhost:8080/index.php/admin/artikel
 ![image](https://github.com/user-attachments/assets/2f7d65be-8fbb-4259-9453-3da87f92b33a)
 
+# 4. Membuat pencarian: buka kembali Controller Artikel, pada method admin_index ubah kodenya seperti berikut
+```![image](https://github.com/user-attachments/assets/64e2ad62-2b86-40aa-bb82-c9ede0962a50)
+
+public function admin_index()  
+{ 
+$title = 'Daftar Artikel'; 
+$q = $this->request->getVar('q') ?? ''; 
+$model = new ArtikelModel(); 
+$data = [ 
+    'title'   => $title, 
+    'q'       => $q, 
+    'artikel' => $model->like('judul', $q)->paginate(10), # data dibatasi 10 record per halaman 
+    'pager'   => $model->pager, 
+]; 
+return view('artikel/admin_index', $data); 
+}
+```
+# 5. Kemudian buka kembali file views/artikel/admin_index.php dan tambahkan form pencarian sebelum deklarasi tabel seperti berikut:
+```
+<form method="get" class="form-search"> 
+    <input type="text" name="q" value="<?= $q; ?>" placeholder="Cari data"> 
+    <input type="submit" value="Cari" class="btn btn-primary"> 
+</form>
+```
+# Dan pada link pager ubah seperti berikut.
+```
+<?= $pager->only(['q'])->links(); ?>
+```
+#  ujicoba dengan membuka kembali halaman admin artikel, masukkan kata kunci tertentu pada form pencarian.
+![image](https://github.com/user-attachments/assets/37252db6-61e0-4870-b1cf-689935b1fd70)
+
 
 
 
