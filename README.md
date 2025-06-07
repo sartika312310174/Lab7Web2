@@ -481,6 +481,49 @@ return view('artikel/admin_index', $data);
 #  ujicoba dengan membuka kembali halaman admin artikel, masukkan kata kunci tertentu pada form pencarian.
 ![image](https://github.com/user-attachments/assets/37252db6-61e0-4870-b1cf-689935b1fd70)
 
+# PRAKTIKUM 6
+# Membuat kolom untuk mengupload gambar pada artikel
+# Buka Controller Artikel pada project sebelumnya, sesuaikan kode pada method add seperti berikut:
+```
+ public function add()  
+    { 
+        // validasi data. 
+        $validation =  \Config\Services::validation(); 
+        $validation->setRules(['judul' => 'required']); 
+        $isDataValid = $validation->withRequest($this->request)->run(); 
+ 
+        if ($isDataValid) 
+        { 
+            $file = $this->request->getFile('gambar'); 
+            $file->move(ROOTPATH . 'public/gambar'); 
+ 
+            $artikel = new ArtikelModel(); 
+            $artikel->insert([ 
+                'judul'  => $this->request->getPost('judul'), 
+                'isi'    => $this->request->getPost('isi'), 
+                'slug'   => url_title($this->request->getPost('judul')), 
+                'gambar' => $file->getName(), 
+            ]); 
+            return redirect('admin/artikel'); 
+        } 
+        $title = "Tambah Artikel"; 
+        return view('artikel/form_add', compact('title')); 
+    }
+```
+# Kemudian pada file views/artikel/form_add.php tambahkan field input file seperti berikut. 
+```
+ <p> 
+        <input type="file" name="gambar"> </p>
+```
+# sesuaikan tag form dengan menambahkan ecrypt type seperti berikut. 
+```
+<form action="" method="post" enctype="multipart/form-data">
+```
+# Melakukan ujicoba dengan mengakses menu tambah artikel
+![image](https://github.com/user-attachments/assets/f54ad00a-e834-41ce-993d-f6ae7043f565)
+![image](https://github.com/user-attachments/assets/07edae33-0ea5-4190-950a-51e1f5b0ba12)
+
+
 
 
 
