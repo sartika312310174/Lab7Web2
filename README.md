@@ -523,6 +523,54 @@ return view('artikel/admin_index', $data);
 ![image](https://github.com/user-attachments/assets/f54ad00a-e834-41ce-993d-f6ae7043f565)
 ![image](https://github.com/user-attachments/assets/07edae33-0ea5-4190-950a-51e1f5b0ba12)
 
+# PRAKTIKUM 7
+# 1. Membuat table Kategori
+![image](https://github.com/user-attachments/assets/eec9aa30-eb56-4993-baeb-7e3d2d777562)
+# 2. Mengubah table artikel
+![image](https://github.com/user-attachments/assets/4c14f7dd-2267-4694-8f70-e096fb4cf4bc)
+# 3. Membuat model kategori
+```
+<?php 
+ 
+namespace App\Models; 
+ 
+use CodeIgniter\Model; 
+ 
+class KategoriModel extends Model 
+{ 
+    protected $table = 'kategori'; 
+    protected $primaryKey = 'id_kategori'; 
+    protected $useAutoIncrement = true; 
+    protected $allowedFields = ['nama_kategori', 'slug_kategori']; 
+}
+```
+# 4. Memodifikasi model kategori
+```
+<?php 
+ 
+namespace App\Models; 
+ 
+use CodeIgniter\Model; 
+ 
+class ArtikelModel extends Model 
+{ 
+   protected $table = 'artikel'; 
+   protected $primaryKey = 'id'; 
+   protected $useAutoIncrement = true; 
+   protected $allowedFields = ['judul', 'isi', 'status', 'slug', 'gambar', 
+'id_kategori']; 
+ 
+   public function getArtikelDenganKategori() 
+   { 
+      return $this->db->table('artikel') 
+                  ->select('artikel.*, kategori.nama_kategori') 
+                  ->join('kategori', 'kategori.id_kategori = artikel.id_kategori')
+                  ->get() 
+                  ->getResultArray(); 
+   } 
+}
+```
+# 5. Memodifikasi Controller Artikel 
 
 
 
