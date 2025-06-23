@@ -590,59 +590,38 @@ class Artikel extends BaseController
         return view('artikel/index', compact('artikel', 'title')); 
     } 
  
-    public function admin_index() 
-    { 
-        $title = 'Daftar Artikel (Admin)'; 
-        $model = new ArtikelModel(); 
+ public function admin_index() 
+{ 
+    $title = 'Daftar Artikel (Admin)'; 
+    $model = new ArtikelModel(); 
+
+    $q = $this->request->getVar('q') ?? ''; 
+    $kategori_id = $this->request->getVar('kategori_id') ?? ''; 
+
+    $artikel = $model->getArtikelDenganKategori($q, $kategori_id); 
+
+    $kategoriModel = new \App\Models\KategoriModel(); 
+    $kategori = $kategoriModel->findAll(); 
+
+    return view('artikel/admin_index', [
+        'title' => $title,
+        'artikel' => $artikel,
+        'pager' => $model->pager,
+        'kategori' => $kategori,
+        'q' => $q,
+        'kategori_id' => $kategori_id
+    ]); 
+}
+
  
-        // Get search keyword 
-        $q = $this->request->getVar('q') ?? ''; 
-        // Get category filter 
-        $kategori_id = $this->request->getVar('kategori_id') ?? ''; 
- 
-        $data = [ 
-            'title' => $title, 
-            'q' => $q, 
-            'kategori_id' => $kategori_id, 
-        ]; 
- 
-        // Building the query 
-        $builder = $model->table('artikel')
-        ->select('artikel.*, kategori.nama_kategori') 
-                        ->join('kategori', 'kategori.id_kategori = 
-artikel.id_kategori'); 
- 
-        // Apply search filter if keyword is provided 
-        if ($q != '') { 
-            $builder->like('artikel.judul', $q); 
-        } 
- 
-        // Apply category filter if category_id is provided 
-        if ($kategori_id != '') { 
-            $builder->where('artikel.id_kategori', $kategori_id); 
-        } 
- 
-        // Apply pagination 
-        $data['artikel'] = $builder->paginate(10); 
-        $data['pager'] = $model->pager; 
- 
-        // Fetch all categories for the filter dropdown 
-        $kategoriModel = new KategoriModel(); 
-        $data['kategori'] = $kategoriModel->findAll(); 
- 
-        return view('artikel/admin_index', $data); 
-    } 
- 
-    // ... (methods add, edit, delete remain largely the same, but update to 
-handle id_kategori) 
+    // ... (methods add, edit, delete remain largely the same, but update to handle id_kategori) 
  
     public function add() 
     { 
         // Validation... 
         if ($this->request->getMethod() == 'post' && $this->validate([ 
-            'judul' => 'required', 
-            'id_kategori' => 'required|integer' // Ensure id_kategori is 
-required and an integer 
+                'judul' => 'required', 
+            'id_kategori' => 'required|integer' // Ensure id_kategori is required and an integer 
         ])) { 
             $model = new ArtikelModel(); 
             $model->insert([ 
@@ -654,59 +633,9 @@ required and an integer
             return redirect()->to('/admin/artikel'); 
         } else { 
             $kategoriModel = new KategoriModel(); 
-            $data['kategori'] = $kategoriModel->findAll(); // Fetch categories 
-for the form 
+            $data['kategori'] = $kategoriModel->findAll(); // Fetch categories for the form 
             $data['title'] = "Tambah Artikel";
-->select('artikel.*, kategori.nama_kategori') 
-                        ->join('kategori', 'kategori.id_kategori = 
-artikel.id_kategori'); 
- 
-        // Apply search filter if keyword is provided 
-        if ($q != '') { 
-            $builder->like('artikel.judul', $q); 
-        } 
- 
-        // Apply category filter if category_id is provided 
-        if ($kategori_id != '') { 
-            $builder->where('artikel.id_kategori', $kategori_id); 
-        } 
- 
-        // Apply pagination 
-        $data['artikel'] = $builder->paginate(10); 
-        $data['pager'] = $model->pager; 
- 
-        // Fetch all categories for the filter dropdown 
-        $kategoriModel = new KategoriModel(); 
-        $data['kategori'] = $kategoriModel->findAll(); 
- 
-        return view('artikel/admin_index', $data); 
-    } 
- 
-    // ... (methods add, edit, delete remain largely the same, but update to 
-handle id_kategori) 
- 
-    public function add() 
-    { 
-        // Validation... 
-        if ($this->request->getMethod() == 'post' && $this->validate([ 
-            'judul' => 'required', 
-            'id_kategori' => 'required|integer' // Ensure id_kategori is 
-required and an integer 
-        ])) { 
-            $model = new ArtikelModel(); 
-            $model->insert([ 
-                'judul' => $this->request->getPost('judul'), 
-                'isi' => $this->request->getPost('isi'), 
-                'slug' => url_title($this->request->getPost('judul')), 
-                'id_kategori' => $this->request->getPost('id_kategori') 
-            ]); 
-            return redirect()->to('/admin/artikel'); 
-        } else { 
-            $kategoriModel = new KategoriModel(); 
-            $data['kategori'] = $kategoriModel->findAll(); // Fetch categories 
-for the form 
-            $data['title'] = "Tambah Artikel"; 
- return view('artikel/form_add', $data); 
+             return view('artikel/form_add', $data); 
         } 
     } 
  
@@ -726,8 +655,7 @@ for the form
         } else { 
             $data['artikel'] = $model->find($id); 
             $kategoriModel = new KategoriModel(); 
-            $data['kategori'] = $kategoriModel->findAll(); // Fetch categories 
-for the form 
+            $data['kategori'] = $kategoriModel->findAll(); // Fetch categories for the form 
             $data['title'] = "Edit Artikel"; 
             return view('artikel/form_edit', $data); 
         } 
@@ -745,13 +673,12 @@ for the form
         $model = new ArtikelModel(); 
         $data['artikel'] = $model->where('slug', $slug)->first(); 
         if (empty($data['artikel'])) { 
-            throw new \CodeIgniter\Exceptions\PageNotFoundException('Cannot 
-find the article.'); 
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('Cannot find the article.'); 
         } 
         $data['title'] = $data['artikel']['judul']; 
         return view('artikel/detail', $data); 
     } 
-}
+} 
 ```
 # 6 Memodifikasi view
 ```
