@@ -850,10 +850,435 @@ Lakukan uji coba untuk memastikan semua fungsi berjalan dengan baik:
 # 4. • Menghapus artikel.
 ![image](https://github.com/user-attachments/assets/f9d4dfc3-9532-48e0-a412-f23af067f2a3)
 
+# PRAKTIKUM 8
+# 1. copy file Ajax pada folder assets yang baru dibuat di dalam folder publik
+```
+https://code.jquery.com/jquery-3.6.0.js
+```
+# 2. Membuat ajax controller, buat file AjaxController.php dalam app/Controllers/AjaxController.php
+```
+<?php
 
- 
+namespace App\Controllers;
+
+use CodeIgniter\Controller;
+use App\Models\ArtikelModel;
+
+class AjaxController extends Controller
+{
+
+    public function index()
+   {
+       $title = 'Daftar Artikel (AJAX)';
+       return view('ajax/index', compact('title'));
+   }
 
 
+    public function getData()
+    {
+        $model = new ArtikelModel();
+        $data = $model->select('artikel.*, kategori.nama_kategori')
+                      ->join('kategori', 'kategori.id_kategori = artikel.id_kategori', 'left')
+                      ->findAll();
+
+        return $this->response->setJSON($data);
+    }
+
+    public function delete($id)
+    {
+        $model = new ArtikelModel();
+        $model->delete($id);
+
+        return $this->response->setJSON(['status' => 'OK']);
+    }
+}
+```
+# 3. Buat View dalam app/Views/ajax/index.php
+```
+<?= $this->include('template/admin_header'); ?>
+
+<h2 class="sub-judul">Daftar Artikel (AJAX)</h2>
+<hr>
+
+<table class="table" id="artikelTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Judul</th>
+            <th>Kategori</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script src="<?= base_url('assets/js/jquery-3.6.0.min.js') ?>"></script>
+<script>
+    $(document).ready(function () {
+        function loadData() {
+            $('#artikelTable tbody').html('<tr><td colspan="4">Loading...</td></tr>');
+            $.ajax({
+                url: "<?= base_url('ajax/getData') ?>",
+                method: "GET",
+                dataType: "json",
+                success: function (data) {
+                    let html = '';
+                    data.forEach(function (row) {
+                        html += '<tr>';
+                        html += '<td>' + row.id + '</td>';
+                        html += '<td>' + row.judul + '</td>';
+                        html += '<td>' + (row.nama_kategori || '-') + '</td>';
+                        html += '<td>';
+                        html += '<a href="<?= base_url('admin/artikel/edit/') ?>' + row.id + '" class="btn btn-primary">Edit</a> ';
+                        html += '<a href="#" class="btn btn-danger btn-delete" data-id="' + row.id + '">Hapus</a>';
+                        html += '</td></tr>';
+                    });
+                    $('#artikelTable tbody').html(html);
+                }
+            });
+        }
+
+        loadData();
+
+        $(document).on('click', '.btn-delete', function (e) {
+            e.preventDefault();
+            const id = $(this).data('id');
+            if (confirm('Yakin ingin menghapus artikel ini?')) {
+                $.ajax({
+                    url: "<?= base_url('ajax/delete/') ?>" + id,
+                    method: "DELETE",
+                    success: function () {
+                        loadData();
+                    },
+                    error: function () {
+                        alert('Gagal menghapus artikel.');
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<?= $this->include('template/admin_footer'); ?>
+```
+# 4. Tambah Route pada app/Config/Routes.php
+```
+$routes->get('ajax', 'AjaxController::index');
+$routes->get('ajax/getData', 'AjaxController::getData');
+$routes->delete('ajax/delete/(:num)', 'AjaxController::delete/$1');
+```
+# TUGAS PRAKTIKUM 8
+# 1. Ubah app/Views/ajax/index.php, tambah form baru  di atas <table> sebelum <table class="table" id="artikelTable">.
+```
+   // Form Tambah Artikel
+   <div class="form-container">
+       <h3 class="form-title-inside">Tambah Artikel</h3>
+       <form id="form-tambah">
+           <div class="form-group">
+               <input type="text" name="judul" placeholder="Judul Artikel" required>
+           </div>
+           <div class="form-group">
+               <textarea name="isi" placeholder="Isi Artikel" required></textarea>
+           </div>
+           <div class="form-group">
+               <select name="id_kategori" required>
+                   <option value="">-- Pilih Kategori --</option>
+                   <option value="1">Tips dan Trik</option>
+                   <option value="2">Resep Masakan</option>
+               </select>
+           </div>
+           <button type="submit" class="btn-primary">Tambah</button>
+       </form>
+   </div>
+   
+   // Tabel Artikel
+   <table class="table" id="artikelTable">
+       <thead>
+           <tr>
+               <th>ID</th>
+               <th>Judul</th>
+               <th>Kategori</th>
+               <th>Aksi</th>
+           </tr>
+       </thead>
+       <tbody></tbody>
+   </table>
+```
+# 2.  Tambah Script AJAX POST di bawah loadData()
+```
+         public function tambah()
+         {
+             $artikel = new \App\Models\ArtikelModel();
+             $slug = url_title($this->request->getPost('judul'), '-', true);
+             
+             $artikel->insert([
+                 'judul'       => $this->request->getPost('judul'),
+                 'isi'         => $this->request->getPost('isi'),
+                 'slug'        => $slug,
+                 'id_kategori' => $this->request->getPost('id_kategori')
+             ]);
+         
+             return $this->response->setJSON(['status' => 'OK']);
+         }
+```
+# 3.  Tambah Function tambah() di AjaxController.php
+```
+   public function tambah()
+   {
+       $artikel = new \App\Models\ArtikelModel();
+       $slug = url_title($this->request->getPost('judul'), '-', true);
+       
+       $artikel->insert([
+           'judul'       => $this->request->getPost('judul'),
+           'isi'         => $this->request->getPost('isi'),
+           'slug'        => $slug,
+           'id_kategori' => $this->request->getPost('id_kategori')
+       ]);
+   
+       return $this->response->setJSON(['status' => 'OK']);
+   }
+```
+# 4. Tambah Route di app/Config/Routes.php
+```
+   $routes->post('ajax/tambah', 'AjaxController::tambah');
+```
+
+# edit artikel di ajax
+# 1 menambahkan  Input Hidden & Tombol Simpan ke Form pada app/Views/ajax/index.php
+```
+   <form id="form-artikel">
+       <input type="hidden" name="id" id="artikel_id">
+       
+       <div class="form-group">
+           <input type="text" name="judul" id="judul" placeholder="Judul Artikel" required>
+       </div>
+   
+       <div class="form-group">
+           <textarea name="isi" id="isi" placeholder="Isi Artikel" required></textarea>
+       </div>
+   
+       <div class="form-group">
+           <select name="id_kategori" id="id_kategori" required>
+               <option value="">-- Pilih Kategori --</option>
+               <option value="1">Umum</option>
+               <option value="2">Teknologi</option>
+           </select>
+       </div>
+   
+       <button type="submit" class="btn-primary" id="submitBtn">Tambah</button>
+   </form>
+```
+# 2.  Update JavaScript pada  ajax/index.php
+```
+   // Menambahkan artikel atau update jika id tersedia
+   $('#form-artikel').on('submit', function (e) {
+       e.preventDefault();
+       const id = $('#artikel_id').val();
+       const url = id ? "<?= base_url('ajax/update') ?>" : "<?= base_url('ajax/tambah') ?>";
+       $.ajax({
+           url: url,
+           method: "POST",
+           data: $(this).serialize(),
+           success: function (res) {
+               if (res.status === 'OK') {
+                   $('#form-artikel')[0].reset();
+                   $('#artikel_id').val('');
+                   $('#submitBtn').text('Tambah');
+                   loadData();
+               } else {
+                   alert('Gagal menyimpan data');
+               }
+           }
+       });
+   });
+   
+   // Handle tombol Edit
+   $(document).on('click', '.btn-edit', function () {
+       const id = $(this).data('id');
+       $.get("<?= base_url('ajax/getArtikel/') ?>" + id, function (data) {
+           $('#artikel_id').val(data.id);
+           $('#judul').val(data.judul);
+           $('#isi').val(data.isi);
+           $('#id_kategori').val(data.id_kategori);
+           $('#submitBtn').text('Update');
+       });
+   });
+```
+# 3.  Update Tabel HTML di fungsi loadData() ajax/index.php
+```
+   html += '<a href="#" class="btn btn-primary btn-edit" data-id="' + row.id + '">Edit</a>';
+```
+# Full codenya  ajax/index.php
+```
+<?= $this->include('template/admin_header'); ?>
+
+<h2 class="sub-judul">Daftar Artikel (AJAX)</h2>
+<hr>
+
+<!--  Form Tambah/Edit Artikel -->
+<div class="form-container">
+    <h3 class="form-title-inside" id="formTitle">Tambah Artikel</h3>
+
+    <form id="form-artikel">
+        <input type="hidden" name="id" id="artikel_id">
+
+        <div class="form-group">
+            <label for="judul">Judul Artikel</label>
+            <input type="text" name="judul" id="judul" required>
+        </div>
+
+        <div class="form-group">
+            <label for="isi">Isi Artikel</label>
+            <textarea name="isi" id="isi" rows="5" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="id_kategori">Kategori</label>
+            <select name="id_kategori" id="id_kategori" required>
+                <option value="">-- Pilih Kategori --</option>
+                <option value="1">Umum</option>
+                <option value="2">Teknologi</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn-primary" id="submitBtn">Tambah</button>
+    </form>
+</div>
+
+<br>
+
+<!--  Tabel Artikel -->
+<table class="table" id="artikelTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Judul</th>
+            <th>Kategori</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<!--  jQuery -->
+<script src="<?= base_url('assets/js/jquery-3.6.0.min.js') ?>"></script>
+<script>
+    $(document).ready(function () {
+        function loadData() {
+            $('#artikelTable tbody').html('<tr><td colspan="4">Loading...</td></tr>');
+            $.ajax({
+                url: "<?= base_url('ajax/getData') ?>",
+                method: "GET",
+                dataType: "json",
+                success: function (data) {
+                    let html = '';
+                    data.forEach(function (row) {
+                        html += '<tr>';
+                        html += '<td>' + row.id + '</td>';
+                        html += '<td>' + row.judul + '</td>';
+                        html += '<td>' + (row.nama_kategori ?? '-') + '</td>';
+                        html += '<td>';
+                        html += '<a href="#" class="btn btn-primary btn-edit" data-id="' + row.id + '">Edit</a> ';
+                        html += '<a href="#" class="btn btn-danger btn-delete" data-id="' + row.id + '">Hapus</a>';
+                        html += '</td></tr>';
+                    });
+                    $('#artikelTable tbody').html(html);
+                }
+            });
+        }
+
+        loadData();
+
+        //  Tambah/Update
+        $('#form-artikel').on('submit', function (e) {
+            e.preventDefault();
+            const id = $('#artikel_id').val();
+            const url = id ? "<?= base_url('ajax/update') ?>" : "<?= base_url('ajax/tambah') ?>";
+            $.ajax({
+                url: url,
+                method: "POST",
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function (res) {
+                    if (res.status === 'OK') {
+                        $('#form-artikel')[0].reset();
+                        $('#artikel_id').val('');
+                        $('#submitBtn').text('Tambah');
+                        $('#formTitle').text('Tambah Artikel');
+                        loadData();
+                    } else {
+                        alert('Gagal menyimpan data');
+                    }
+                }
+            });
+        });
+
+        //  Edit
+        $(document).on('click', '.btn-edit', function () {
+            const id = $(this).data('id');
+            $.get("<?= base_url('ajax/getArtikel/') ?>" + id, function (data) {
+                $('#artikel_id').val(data.id);
+                $('#judul').val(data.judul);
+                $('#isi').val(data.isi);
+                $('#id_kategori').val(data.id_kategori);
+                $('#submitBtn').text('Update');
+                $('#formTitle').text('Edit Artikel');
+            });
+        });
+
+        //  Hapus
+        $(document).on('click', '.btn-delete', function (e) {
+            e.preventDefault();
+            const id = $(this).data('id');
+            if (confirm('Yakin ingin menghapus artikel ini?')) {
+                $.ajax({
+                    url: "<?= base_url('ajax/delete/') ?>" + id,
+                    method: "DELETE",
+                    success: function () {
+                        loadData();
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<?= $this->include('template/admin_footer'); ?>
+```
+# Menambah route baru di routes.php
+```
+   $routes->get('ajax/getArtikel/(:num)', 'AjaxController::getArtikel/$1');
+   $routes->post('ajax/update', 'AjaxController::update');
+```
+# Tambah method di controller ajax pada  AjaxController.php 
+```
+   public function getArtikel($id)
+   {
+       $model = new \App\Models\ArtikelModel();
+       $data = $model->find($id);
+       return $this->response->setJSON($data);
+   }
+   
+   public function update()
+   {
+       $model = new \App\Models\ArtikelModel();
+       $id = $this->request->getPost('id');
+   
+       $model->update($id, [
+           'judul'       => $this->request->getPost('judul'),
+           'isi'         => $this->request->getPost('isi'),
+           'id_kategori' => $this->request->getPost('id_kategori')
+       ]);
+   
+       return $this->response->setJSON(['status' => 'OK']);
+   }
+```
+# Akses pada http://localhost:8080/ajax
+# Hasil
+![image](https://github.com/user-attachments/assets/8d57c93f-babf-416e-bfa5-90bc0d3e4bba)
+
+# Tambah artikel
+![image](https://github.com/user-attachments/assets/18143cbd-92f3-4a79-93a0-6efc999dea3f)
 
 
 
