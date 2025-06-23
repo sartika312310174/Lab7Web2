@@ -840,6 +840,17 @@ Lakukan uji coba untuk memastikan semua fungsi berjalan dengan baik:
 • Menghapus artikel.
 ```
 # 1. • Menampilkan daftar artikel dengan nama kategori. 
+![image](https://github.com/user-attachments/assets/4a165a4b-8f65-4c35-b0fc-5b540d36f5f9)
+# 2. Menambah artikel baru dengan memilih kategori. 
+![image](https://github.com/user-attachments/assets/74eea483-091a-4734-a27d-8f1cac3d5759)
+![image](https://github.com/user-attachments/assets/4afb9457-bab4-4217-88e3-45f96009afda)
+# 3. • Mengedit artikel dan mengubah kategorinya. 
+![image](https://github.com/user-attachments/assets/68164dbd-fa12-474b-9eb5-6acebebec510)
+![image](https://github.com/user-attachments/assets/6d7a8bf6-6201-4d3c-a908-72d93af6ea25)
+# 4. • Menghapus artikel.
+![image](https://github.com/user-attachments/assets/f9d4dfc3-9532-48e0-a412-f23af067f2a3)
+
+
  
 
 
