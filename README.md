@@ -1510,4 +1510,488 @@ Tambah cssnya
 # sortir sesuai kategori
 ![image](https://github.com/user-attachments/assets/ed340279-dd2a-44b2-8110-11109f174270)
 
+# PRAKTIKUM 10
+```
+Persiapan 
+Periapan awal adalah mengunduh aplikasi REST Client, ada banyak aplikasi yang dapat digunakan untuk 
+keperluan tersebut. Salah satunya adalah Postman. Postman – Merupakan aplikasi yang berfungsi 
+sebagai REST Client, digunakan untuk testing REST API. Unduh apliasi Postman dari tautan berikut: 
+https://www.postman.com/downloads/ 
+```
+# Membuat Model. 
+```
+Pada modul sebelumnya sudah dibuat ArtikelModel, pada modul ini kita akan memanfaatkan model 
+tersebut agar dapat diakses melalui API. 
+```
+# Membuat REST Controller 
+Pada tahap ini, kita akan membuat file REST Controller yang berisi fungsi untuk menampilkan, 
+menambah, mengubah dan menghapus data. Masuklah ke direktori app\Controllers dan buatlah file 
+baru bernama Post.php. Kemudian, salin kode di bawah ini ke dalam file tersebut:
+```
+<?php
+
+namespace App\Controllers;
+
+use CodeIgniter\RESTful\ResourceController;
+use CodeIgniter\API\ResponseTrait;
+use App\Models\ArtikelModel;
+
+class Post extends ResourceController
+{
+    use ResponseTrait;
+
+    // Menampilkan semua data artikel
+    public function index()
+    {
+        $model = new ArtikelModel();
+        $data['artikel'] = $model->orderBy('id', 'DESC')->findAll();
+        return $this->respond($data);
+    }
+
+    // Menambahkan data baru
+    public function create()
+    {
+        $model = new ArtikelModel();
+        $data = [
+            'judul' => $this->request->getVar('judul'),
+            'isi'   => $this->request->getVar('isi')
+        ];
+        $model->insert($data);
+
+        return $this->respondCreated([
+            'status' => 201,
+            'messages' => ['success' => 'Data artikel berhasil ditambahkan.']
+        ]);
+    }
+
+    // Menampilkan 1 data
+    public function show($id = null)
+    {
+        $model = new ArtikelModel();
+        $data = $model->where('id', $id)->first();
+        return $data
+            ? $this->respond($data)
+            : $this->failNotFound('Data tidak ditemukan.');
+    }
+
+    // Mengupdate data
+    public function update($id = null)
+    {
+        $model = new ArtikelModel();
+        $data = [
+            'judul' => $this->request->getVar('judul'),
+            'isi'   => $this->request->getVar('isi')
+        ];
+        $model->update($id, $data);
+
+        return $this->respond([
+            'status' => 200,
+            'messages' => ['success' => 'Data artikel berhasil diubah.']
+        ]);
+    }
+
+    // Menghapus data
+    public function delete($id = null)
+    {
+        $model = new ArtikelModel();
+        $data = $model->where('id', $id)->first();
+
+        if (!$data) return $this->failNotFound('Data tidak ditemukan.');
+
+        $model->delete($id);
+
+        return $this->respondDeleted([
+            'status' => 200,
+            'messages' => ['success' => 'Data artikel berhasil dihapus.']
+        ]);
+    }
+}
+```
+# Routing REST API masuklah ke direktori app/Config dan bukalah file Routes.php. Tambahkan kode
+```
+$routes->resource('post');
+```
+# Jalankan php spark routes
+![image](https://github.com/user-attachments/assets/055865ee-ed30-4f36-90e4-ae3423fd0342)
+# Testing REST API CodeIgniter 
+Buka aplikasi postman dan pilih create new → HTTP Request 
+![image](https://github.com/user-attachments/assets/1941373d-b86b-44cf-846e-df4db348d222)
+# Menampilkan Semua Data 
+```
+Pilih method GET dan masukkan URL berikut: 
+http://localhost:8080/post  
+Lalu, klik Send. Jika hasil test menampilkan semua data artikel dari database, maka pengujian 
+berhasil.
+```
+![image](https://github.com/user-attachments/assets/5ae52f56-a4a8-4712-9bc3-66bacd320514)
+# Menampilkan Data Spesifik 
+```
+Masih menggunakan method GET, hanya perlu menambahkan ID artikel di belakang URL 
+seperti ini: 
+http://localhost:8080/post/2 
+Selanjutnya, klik Send. Request tersebut akan menampilkan data artikel yang memiliki ID 
+nomor 2 di database. 
+```
+![image](https://github.com/user-attachments/assets/6cb33865-d0d5-44f9-9d7b-f4da3ffb0faa)
+# Mengubah Data  
+```
+Untuk mengubah data, silakan ganti method menjadi PUT. Kemudian, masukkan URL artikel 
+yang ingin diubah. Misalnya, ingin mengubah data artikel dengan ID nomor 2, maka masukkan 
+URL berikut: 
+http://localhost:8080/post/2  
+Selanjutnya, pilih tab Body. Kemudian, pilih x-www-form-uriencoded. Masukkan nama 
+atribut tabel pada kolom KEY dan nilai data yang baru pada kolom VALUE. Kalau sudah, 
+klik Send.
+```
+![image](https://github.com/user-attachments/assets/eb0a6b55-ca4b-4fce-810b-6dba7a46fcd7)
+![image](https://github.com/user-attachments/assets/b37a2349-f409-4756-b2ff-cf0e7de4edd8)
+# Menambahkan Data 
+```
+Anda perlu menggunakan method POST untuk menambahkan data baru ke database. 
+Kemudian, masukkan URL berikut: 
+http://localhost:8080/post 
+Pilih tab Body, lalu pilih x-www-form-uriencoded. Masukkan atribut tabel pada kolom KEY 
+dan nilai data baru di kolom VALUE. Jangan lupa, klik Send.
+```
+![image](https://github.com/user-attachments/assets/f4a6ae81-1619-42f8-b69d-1a8458f522ec)
+# Menghapus Data 
+```
+Pilih method DELETE untuk menghapus data. Lalu, masukkan URL spesifik data mana yang 
+ingin di hapus. Misalnya, ingin menghapus data nomor 4, maka URL-nya seperti ini: 
+http://localhost:8080/post/7 
+Langsung saja klik Send, maka akan mendapatkan pesan bahwa data telah berhasil dihapus dari 
+database.
+```
+![image](https://github.com/user-attachments/assets/4cdafcbd-6d8e-4ecd-9c61-dba3b468d413)
+
+# PRAKTIKUM 11
+```
+Langkah-langkah Praktikum 
+Persiapan 
+Untuk memulai penggunaan framework Vuejs, dapat dialkukan dengan menggunakan npm, 
+atau bisa juga dengan cara manual. Untuk praktikum kali ini kita akan gunakan cara manual. 
+Yang diperlukan adalah library Vuejs, Axios untuk melakukan call API REST. Menggunakan 
+CDN.
+```
+# Library VueJS 
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> 
+# Library Axios 
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script> 
+# Struktur Direktory 
+Buat Project baru dengan struktur file dan directory seperti berikut: 
+``` 
+│   index.html 
+└───assets 
+    ├───css 
+    │       style.css 
+    └───js 
+            app.js 
+```
+# Menampilkan data File index.html 
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daftar Artikel</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Toolbar Header dan Tombol Tambah -->
+<div class="header-bar" style="display: flex; align-items: center; margin-bottom: 20px; gap: 20px;">
+  <h1 style="margin: 0;">Daftar Artikel</h1>
+
+</div>
+
+    <!-- Modal Form -->
+    <div class="modal" v-if="showForm">
+      <div class="modal-content">
+        <span class="close" @click="showForm = false">&times;</span>
+        <form id="form-data" @submit.prevent="saveData">
+          <h3 id="form-title">{{ formTitle }}</h3>
+          <div><input type="text" v-model="formData.judul" placeholder="Judul" required /></div>
+          <div><textarea v-model="formData.isi" placeholder="Isi Artikel" rows="8"></textarea></div>
+          <div>
+
+            <select v-model="formData.status">
+            <option value="0">Draft</option>
+            <option value="1">Publish</option>
+            </select>
+
+
+          <input type="hidden" v-model="formData.id" />
+          <button type="submit" id="btnSimpan">Simpan</button>
+          <button type="button" @click="showForm = false">Batal</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
+```
+# File apps.js
+```
+const { createApp } = Vue;
+
+// tentukan lokasi API REST End Point
+const apiUrl = "http://localhost:8080/Framework/public";
+
+createApp({
+  data() {
+    return {
+      artikel: [],
+    };
+  },
+  mounted() {
+    this.loadData();
+  },
+  methods: {
+    loadData() {
+      axios
+        .get(apiUrl + "/post")
+        .then((response) => {
+          this.artikel = response.data.artikel;
+        })
+        .catch((error) => console.log(error));
+    },
+    statusText(status) {
+      if (!status) return "";
+      return status == 1 ? "Publish" : "Draft";
+    },
+  },
+}).mount("#app");
+```
+# hasil
+![image](https://github.com/user-attachments/assets/c6bc781d-4c84-401b-97a9-94bffbcbc7ba)
+# Form Tambah dan Ubah Data Pada file index,html sispkan kode berikut sebelum table data. 
+```
+<button id="btn-tambah" @click="tambah">Tambah Data</button>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Judul</th>
+      <th>Status</th>
+      <th>Aksi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr v-for="(row, index) in artikel" :key="row.id">
+      <td class="center-text">{{ row.id }}</td>
+      <td>{{ row.judul }}</td>
+      <td class="center-text">{{ statusText(row.status) }}</td>
+      <td class="center-text">
+        <a href="#" @click.prevent="edit(row)">Edit</a>
+        <a href="#" @click.prevent="hapus(index, row.id)">Hapus</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+```
+# File app.jsnya lengkapi
+```
+const { createApp } = Vue;
+const apiUrl = "http://localhost:8080/Framework/public"; 
+
+createApp({
+  data() {
+    return {
+      artikel: [],
+      formData: {
+        id: null,
+        judul: '',
+        isi: '',
+        status: '0'
+      },
+      showForm: false,
+      formTitle: 'Tambah Artikel',
+    };
+  },
+  mounted() {
+    this.loadData();
+  },
+  methods: {
+    loadData() {
+      axios.get(apiUrl + "/post")
+        .then(response => {
+          this.artikel = response.data.artikel;
+        })
+        .catch(error => console.log(error));
+    },
+    statusText(status) {
+      return status == 1 ? "Publish" : "Draft";
+    },
+    tambah() {
+      this.formData = { id: null, judul: '', isi: '', status: '0' };
+      this.formTitle = "Tambah Artikel";
+      this.showForm = true;
+    },
+    edit(item) {
+      this.formData = { ...item };
+      this.formTitle = "Ubah Artikel";
+      this.showForm = true;
+    },
+    hapus(id) {
+      if (confirm("Yakin ingin menghapus artikel ini?")) {
+        axios.delete(apiUrl + "/post/" + id)
+          .then(() => this.loadData())
+          .catch(error => console.log(error));
+      }
+    },
+    saveData() {
+      if (this.formData.id) {
+        // Update
+        axios.put(apiUrl + "/post/" + this.formData.id, this.formData)
+          .then(() => this.loadData())
+          .catch(error => console.log(error));
+      } else {
+        // Tambah
+        axios.post(apiUrl + "/post", this.formData)
+          .then(() => this.loadData())
+          .catch(error => console.log(error));
+      }
+
+      // Reset form
+      this.formData = { id: null, judul: '', isi: '', status: '0' };
+      this.showForm = false;
+    }
+  }
+}).mount('#app');
+```
+# File cssnya
+```
+#app {
+  margin: 0 auto;
+  width: 900px;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#btn-tambah {
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: #3152d6;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+}
+
+th {
+  padding: 12px;
+  background-color: #5778ff;
+  color: white;
+  text-align: center;
+}
+
+td {
+  padding: 10px;
+  text-align: left;
+}
+
+.center-text {
+  text-align: center;
+}
+
+tr:nth-child(even) {
+  background-color: #f4f7ff;
+}
+
+td a {
+  margin: 0 8px;
+  text-decoration: none;
+  color: #3152d6;
+  font-weight: bold;
+}
+
+td a:hover {
+  text-decoration: underline;
+}
+
+.modal {
+  display: block;
+  position: fixed;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 5% auto;
+  padding: 20px;
+  width: 600px;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  right: 16px;
+  top: 10px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#form-data input,
+#form-data textarea,
+#form-data select {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#form-data button {
+  padding: 10px 20px;
+  margin-top: 10px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+#btnSimpan {
+  background-color: #3152d6;
+  color: #fff;
+  border: none;
+}
+
+.header-bar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.header-bar h1 {
+  margin: 0;
+}
+```
+# Hasilnya
+![image](https://github.com/user-attachments/assets/1c5ec4c5-2826-44a6-9486-57097fe93698)
+
 
