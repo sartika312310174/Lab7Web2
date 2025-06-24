@@ -1472,6 +1472,42 @@ public function admin_index()
 
 <?= $this->include('template/admin_footer'); ?>
 ```
-# HASIL
+# HASIL buka di: http://localhost:8080/index.php/admin/artikel
 ![image](https://github.com/user-attachments/assets/7e8dc2fc-78ff-4aad-8474-01bb087836fe)
+# Pertanyaan dan Tugas 
+```
+1. Selesaikan semua langkah praktikum di atas.
+jawab: sudah
+2. Modifikasi tampilan data artikel dan pagination sesuai kebutuhan desain.
+jawab: sudah 
+3. Tambahkan indikator loading saat data sedang diambil dari server.
+jawab: sudah ada di bagian ini
+Sudah ada bagian ini:
+html
+Salin
+Edit
+<div id="loading" style="display: none; text-align: center; margin-top: 20px;">
+  <div class="spinner"></div>
+  <p>Mencari artikel...</p>
+</div>
+Tambah cssnya
+.spinner {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #007bff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 0.8s linear infinite;
+    margin: auto;
+  }
+4. Implementasikan fitur sorting (mengurutkan artikel berdasarkan judul, dll.) dengan AJAX.
+
+```
+# 3. indikator loading
+![image](https://github.com/user-attachments/assets/ea985075-1f4d-40fa-aeef-bdb36c782d70)
+# 4. sortir sesuai judul
+![image](https://github.com/user-attachments/assets/2ddc5302-9cb7-408a-904a-d7bd5afcec23)
+# sortir sesuai kategori
+![image](https://github.com/user-attachments/assets/ed340279-dd2a-44b2-8110-11109f174270)
+
 
